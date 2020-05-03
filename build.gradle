@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'com.twitter.anubhav'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter:5.6.2"
+    testImplementation 'org.mockito:mockito-junit-jupiter:2.23.0'
+    testImplementation 'org.assertj:assertj-core:3.15.0'
+
+}
