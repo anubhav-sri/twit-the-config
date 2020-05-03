@@ -1,16 +1,25 @@
 package com.twitter.anubhav;
 
+import com.twitter.anubhav.models.Block;
+import com.twitter.anubhav.models.Props;
+
 import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 public class Config {
 
-    private HashMap<String, Object> blocks = new HashMap<>();
+    private HashMap<String, Map<String, Object>> blocks = new HashMap<>();
 
-    public String get(String key) {
-        return blocks.get(key).toString();
+    public Map<String, Object> get(String key) {
+        return blocks.getOrDefault(key, new HashMap<>());
     }
 
-    public void add(String config1) {
-        blocks.put(config1, "");
+    public void addBlock(Block block) {
+        Map<String, Object> propMap = block.getPropsList()
+                .stream()
+                .collect(toMap(Props::getKey, Props::getValue));
+        blocks.put(block.getName(), propMap);
     }
 }

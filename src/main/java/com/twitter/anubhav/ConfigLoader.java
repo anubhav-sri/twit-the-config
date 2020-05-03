@@ -14,9 +14,8 @@ public class ConfigLoader {
 
     public Config loadConfig(String configFile) {
         Config config = new Config();
-        configFileReader.readLinesToStream(new File(configFile))
-                .map(line -> configParser.parseBlocks(line))
-                .forEach(config::add);
+        configParser.parseBlocks(configFileReader.readLinesToStream(new File(configFile)))
+                .forEach(config::addBlock);
         return config;
     }
 
