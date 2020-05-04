@@ -41,4 +41,5 @@ Another set of improvement is the contract for the Parser. The parser exposes an
 * Parse() - responsible to parse.
 Currently the classes extending from PatternMatchingParse, uses the matches method internally while parsing. May be we can expose matches as a contract with the Parser interface and then let the caller first call the macthes before calling parse. That will make the GroupParser and Property parser more cleaner. Also this goes well with our very first suggestion for improvement.
 
+The other approach, which might be more optimized for large files, would be creating a parsing tree. Where root node would be all lines and then level one could be all groups and level 2 could be all props under groups, level 3 could be overrides. THis approach is used in case of grammar parsing, like programming languages. I thought this would be too much for this lebel of problem hence didn't applied.
 
