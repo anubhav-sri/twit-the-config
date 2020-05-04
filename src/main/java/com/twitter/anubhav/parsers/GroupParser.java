@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class GroupParser {
@@ -21,38 +20,31 @@ public class GroupParser {
 
     public List<Group> parseGroups(Stream<String> filteredLines) {
         List<Group> groupsInFile = new ArrayList<>();
-        List<String> stringList = filteredLines.collect(Collectors.toList());
 
-        String firstBlock = verifyIfItStartsWithBlock(stringList);
-        Group currentGroup = new Group(firstBlock);
+        var currentGroupRef = new Object() {
+            Group currentGroup = null;
+        };
 
-        for (String line : stringList.subList(1, stringList.size())) {
+        filteredLines.forEach(line -> {
             Matcher matcherForGroup = patternForGroup.matcher(line);
             if (matcherForGroup.matches()) {
-                currentGroup = addTheExistingGroupAndStartNewGroup(groupsInFile, currentGroup, matcherForGroup);
+                currentGroupRef.currentGroup = addTheExistingGroupAndStartNewGroup(groupsInFile, currentGroupRef.currentGroup, matcherForGroup);
             } else {
-                currentGroup.addProperty(propertyParser.parseProp(line));
+                verifyIfPropsHaveAGroup(currentGroupRef.currentGroup);
+                currentGroupRef.currentGroup.addProperty(propertyParser.parseProp(line));
             }
-        }
-        addTheLastGroupFound(groupsInFile, currentGroup);
+        });
+        groupsInFile.add(currentGroupRef.currentGroup);
         return groupsInFile;
+    }
+
+    private void verifyIfPropsHaveAGroup(Group currentGroup) {
+        if (currentGroup == null) throw new ConfigFormatException("No block found at start");
     }
 
     private Group addTheExistingGroupAndStartNewGroup(List<Group> groupsInFile, Group currentGroup, Matcher matcherForGroup) {
         groupsInFile.add(currentGroup);
-        currentGroup = new Group(matcherForGroup.group(1));
-        return currentGroup;
+        return new Group(matcherForGroup.group(1));
     }
 
-    private void addTheLastGroupFound(List<Group> groupsInFile, Group currentGroup) {
-        if (!groupsInFile.contains(currentGroup)) groupsInFile.add(currentGroup);
-    }
-
-    private String verifyIfItStartsWithBlock(List<String> stringList) {
-        Matcher compiledPattern = patternForGroup.matcher(stringList.get(0));
-        if (compiledPattern.find()) {
-            return compiledPattern.group(1);
-        }
-        throw new ConfigFormatException("No block found at start");
-    }
 }

@@ -65,12 +65,12 @@ class GroupParserTest {
     void shouldReturnMultipleBlocksWithMultipleProps() {
         Group expectedGroup1 = new Group("block");
         Prop expectedProp1 = new Prop("p", 1);
-        Prop expectedProp2 = new Prop("p", 1);
+        Prop expectedProp2 = new Prop("p", 2);
         expectedGroup1.addProperty(expectedProp1);
         expectedGroup1.addProperty(expectedProp2);
 
         Group expectedGroup2 = new Group("block1");
-        Prop expectedProp3 = new Prop("p", 2);
+        Prop expectedProp3 = new Prop("p", 3);
         expectedGroup2.addProperty(expectedProp3);
 
         when(propertyParser.parseProp("p=1")).thenReturn(expectedProp1);
