@@ -43,7 +43,8 @@ public class GroupParser {
     }
 
     private Group addTheExistingGroupAndStartNewGroup(List<Group> groupsInFile, Group currentGroup, Matcher matcherForGroup) {
-        groupsInFile.add(currentGroup);
+        if (currentGroup != null)
+            groupsInFile.add(currentGroup);
         return new Group(matcherForGroup.group(1));
     }
 
