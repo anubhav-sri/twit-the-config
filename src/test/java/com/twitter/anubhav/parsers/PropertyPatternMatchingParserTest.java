@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PropertyParserTest {
+class PropertyPatternMatchingParserTest {
 
     private PropertyParser propertyParser;
 
@@ -21,19 +21,19 @@ class PropertyParserTest {
     @Test
     void shouldThrowConfigFormatExceptionIfPropertyNotInCorrectFormat() {
         Assertions.assertThrows(ConfigFormatException.class,
-                () -> new PropertyParser().parseProp("p-invalid"));
+                () -> new PropertyParser().parse("p-invalid"));
     }
 
     @Test
     void shouldReturnPropsWithKeyAndValue() {
-        Prop actualProp = propertyParser.parseProp("p=valid");
+        Prop actualProp = propertyParser.parse("p=valid");
 
         assertThat(actualProp).isEqualTo(new Prop("p", "valid"));
     }
 
     @Test
     void shouldReturnOverRidenPropsWithOverRidesAndKeyAndValue() {
-        Prop actualProp = propertyParser.parseProp("p<ubuntu>=valid");
+        Prop actualProp = propertyParser.parse("p<ubuntu>=valid");
 
         assertThat(actualProp).isEqualTo(new OverRiddenProp("p", "valid", "ubuntu"));
     }

@@ -8,8 +8,6 @@ import com.twitter.anubhav.readers.ConfigFileReader;
 import java.io.File;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ConfigLoader {
@@ -29,7 +27,7 @@ public class ConfigLoader {
                 .readLinesToStream(new File(configFile))
                 .filter(NON_EMPTY_FILTER);
 
-        groupParser.parseGroups(nonEmptyLinesInFile)
+        groupParser.parse(nonEmptyLinesInFile)
                 .forEach(group -> config.addBlock(group, overrides));
         return config;
     }

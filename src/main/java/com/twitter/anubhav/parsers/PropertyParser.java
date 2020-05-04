@@ -4,37 +4,40 @@ import com.twitter.anubhav.exceptions.ConfigFormatException;
 import com.twitter.anubhav.models.OverRiddenProp;
 import com.twitter.anubhav.models.Prop;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Optional;
 
-public class PropertyParser {
+public class PropertyParser extends PatternMatchingParser<String, Prop> {
     private static final String REGEX_FOR_KEY_VALUE_PAIRS = "([a-zA-Z_ ]+)<*([a-zA-Z]*)>*=([a-zA-Z0-9\\-_ ]*)";
-    private Pattern patternForKeyValuePairs = Pattern.compile(REGEX_FOR_KEY_VALUE_PAIRS);
 
-    public Prop parseProp(String line) {
-        Matcher keyValueMatcher = patternForKeyValuePairs.matcher(line);
+    public PropertyParser() {
+        super(REGEX_FOR_KEY_VALUE_PAIRS);
+    }
 
-        if (keyValueMatcher.matches()) {
-            if (isAnOverRiddenProperty(keyValueMatcher)) {
-                return createOverRiddenProp(keyValueMatcher);
+    public Prop parse(String line) {
+
+        Optional<List<String>> matchedTokens = super.matches(line);
+        if (matchedTokens.isPresent()) {
+            if (isAnOverRiddenProperty(matchedTokens.get())) {
+                return createOverRiddenProp(matchedTokens.get());
             }
-            return createDefaultProp(keyValueMatcher);
+            return createDefaultProp(matchedTokens.get());
         }
         throw new ConfigFormatException("Not a correct format for key-value pair");
 
     }
 
-    private Prop createDefaultProp(Matcher keyValueMatcher) {
-        return new Prop(keyValueMatcher.group(1), keyValueMatcher.group(3));
+    private Prop createDefaultProp(List<String> keyValueMatcher) {
+        return new Prop(keyValueMatcher.get(1), keyValueMatcher.get(3));
     }
 
-    private OverRiddenProp createOverRiddenProp(Matcher keyValueMatcher) {
-        return new OverRiddenProp(keyValueMatcher.group(1),
-                keyValueMatcher.group(3),
-                keyValueMatcher.group(2));
+    private OverRiddenProp createOverRiddenProp(List<String> keyValueMatcher) {
+        return new OverRiddenProp(keyValueMatcher.get(1),
+                keyValueMatcher.get(3),
+                keyValueMatcher.get(2));
     }
 
-    private boolean isAnOverRiddenProperty(Matcher keyValueMatcher) {
-        return !keyValueMatcher.group(2).isEmpty();
+    private boolean isAnOverRiddenProperty(List<String> keyValueMatcher) {
+        return !keyValueMatcher.get(2).isEmpty();
     }
 }

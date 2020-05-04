@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GroupParserTest {
+class GroupPatternMatchingParserTest {
 
     private GroupParser groupParser;
     @Mock
@@ -33,13 +33,13 @@ class GroupParserTest {
     @Test
     void shouldThrowConfigFormatExceptionWhenFileDoesNotStartsWithBlock() {
         Assertions.assertThrows(ConfigFormatException.class,
-                () -> groupParser.parseGroups(Stream.of("p=1", "[block]")));
+                () -> groupParser.parse(Stream.of("p=1", "[block]")));
 
     }
 
     @Test
     void shouldReturnBlockWithEmptyProps() {
-        List<Group> groups = groupParser.parseGroups(Stream.of("[block]"));
+        List<Group> groups = groupParser.parse(Stream.of("[block]"));
         assertThat(groups).hasSize(1);
         assertThat(groups.get(0)).isEqualTo(new Group("block"));
 
@@ -51,9 +51,9 @@ class GroupParserTest {
         Prop expectedProp = new Prop("p", 1);
         expectedGroup.addProperty(expectedProp);
 
-        when(propertyParser.parseProp("p=1")).thenReturn(expectedProp);
+        when(propertyParser.parse("p=1")).thenReturn(expectedProp);
 
-        List<Group> groups = groupParser.parseGroups(Stream.of("[block]", "p=1"));
+        List<Group> groups = groupParser.parse(Stream.of("[block]", "p=1"));
 
         assertThat(groups).hasSize(1);
         assertThat(groups.get(0)).isEqualTo(expectedGroup);
@@ -73,11 +73,11 @@ class GroupParserTest {
         Prop expectedProp3 = new Prop("p", 3);
         expectedGroup2.addProperty(expectedProp3);
 
-        when(propertyParser.parseProp("p=1")).thenReturn(expectedProp1);
-        when(propertyParser.parseProp("p=2")).thenReturn(expectedProp3);
-        when(propertyParser.parseProp("p=4")).thenReturn(expectedProp2);
+        when(propertyParser.parse("p=1")).thenReturn(expectedProp1);
+        when(propertyParser.parse("p=2")).thenReturn(expectedProp3);
+        when(propertyParser.parse("p=4")).thenReturn(expectedProp2);
 
-        List<Group> groups = groupParser.parseGroups(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
+        List<Group> groups = groupParser.parse(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
 
         assertThat(groups).containsAll(List.of(expectedGroup1, expectedGroup2));
 

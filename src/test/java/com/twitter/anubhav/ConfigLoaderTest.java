@@ -7,7 +7,6 @@ import com.twitter.anubhav.parsers.GroupParser;
 import com.twitter.anubhav.readers.ConfigFileReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +49,7 @@ class ConfigLoaderTest {
 
         Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "[group2]");
         when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
-        when(groupParser.parseGroups(any())).thenReturn(List.of(group1, group2));
+        when(groupParser.parse(any())).thenReturn(List.of(group1, group2));
 
         Config config = new ConfigLoader(groupParser, configFileReader)
                 .loadConfig(configFile.getPath(), new ArrayList<>());
@@ -72,7 +70,7 @@ class ConfigLoaderTest {
 
         Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "", "");
         when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
-        when(groupParser.parseGroups(any())).thenReturn(List.of(group1));
+        when(groupParser.parse(any())).thenReturn(List.of(group1));
 
         Config config = new ConfigLoader(groupParser, configFileReader)
                 .loadConfig(configFile.getPath(), new ArrayList<>());

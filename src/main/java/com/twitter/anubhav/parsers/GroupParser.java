@@ -5,20 +5,19 @@ import com.twitter.anubhav.models.Group;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-public class GroupParser {
+public class GroupParser extends PatternMatchingParser<Stream<String>, List<Group>> {
+    private static final String GROUP_REGEX = "\\[([^]]+)]";
     private PropertyParser propertyParser;
-    private static final String REGEX_FOR_GROUP = "\\[([^]]+)]";
-    private Pattern patternForGroup = Pattern.compile(REGEX_FOR_GROUP);
 
     public GroupParser(PropertyParser propertyParser) {
+        super(GROUP_REGEX);
         this.propertyParser = propertyParser;
     }
 
-    public List<Group> parseGroups(Stream<String> filteredLines) {
+    public List<Group> parse(Stream<String> filteredLines) {
         List<Group> groupsInFile = new ArrayList<>();
 
         var currentGroupRef = new Object() {
@@ -26,12 +25,12 @@ public class GroupParser {
         };
 
         filteredLines.forEach(line -> {
-            Matcher matcherForGroup = patternForGroup.matcher(line);
-            if (matcherForGroup.matches()) {
-                currentGroupRef.currentGroup = addTheExistingGroupAndStartNewGroup(groupsInFile, currentGroupRef.currentGroup, matcherForGroup);
+            Optional<List<String>> matchedTokens = super.matches(line);
+            if (matchedTokens.isPresent()) {
+                currentGroupRef.currentGroup = addTheExistingGroupAndStartNewGroup(groupsInFile, currentGroupRef.currentGroup, matchedTokens.get());
             } else {
                 verifyIfPropsHaveAGroup(currentGroupRef.currentGroup);
-                currentGroupRef.currentGroup.addProperty(propertyParser.parseProp(line));
+                currentGroupRef.currentGroup.addProperty(propertyParser.parse(line));
             }
         });
         groupsInFile.add(currentGroupRef.currentGroup);
@@ -42,10 +41,9 @@ public class GroupParser {
         if (currentGroup == null) throw new ConfigFormatException("No block found at start");
     }
 
-    private Group addTheExistingGroupAndStartNewGroup(List<Group> groupsInFile, Group currentGroup, Matcher matcherForGroup) {
+    private Group addTheExistingGroupAndStartNewGroup(List<Group> groupsInFile, Group currentGroup, List<String> matcherForGroup) {
         if (currentGroup != null)
             groupsInFile.add(currentGroup);
-        return new Group(matcherForGroup.group(1));
+        return new Group(matcherForGroup.get(1));
     }
-
 }
