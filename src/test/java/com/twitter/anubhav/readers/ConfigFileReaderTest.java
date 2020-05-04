@@ -1,7 +1,6 @@
-package com.twitter.anubhav;
+package com.twitter.anubhav.readers;
 
 import com.twitter.anubhav.exceptions.InvalidFileExtensionException;
-import com.twitter.anubhav.readers.ConfigFileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class ConfigFileReaderTest {
     }
 
     @Test
-    public void shouldReadFilesToStreamOfLines() throws URISyntaxException {
+    void shouldReadFilesToStreamOfLines() throws URISyntaxException {
         File inputFile = getFileURI("config.conf");
 
         Stream<String> streamOfLines = new ConfigFileReader().readLinesToStream(inputFile);
@@ -33,7 +32,7 @@ class ConfigFileReaderTest {
     }
 
     @Test
-    public void shouldThrowInvalidFileExtensionExceptionIfFileWithInvalidExtensionPasses() throws URISyntaxException {
+    void shouldThrowInvalidFileExtensionExceptionIfFileWithInvalidExtensionPasses() throws URISyntaxException {
         File invalidInputFile = getFileURI("config.invalid");
 
         Assertions.assertThrows(InvalidFileExtensionException.class, () -> configFileReader.readLinesToStream(invalidInputFile));

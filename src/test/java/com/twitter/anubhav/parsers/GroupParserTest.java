@@ -1,10 +1,8 @@
-package com.twitter.anubhav;
+package com.twitter.anubhav.parsers;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
 import com.twitter.anubhav.models.Group;
 import com.twitter.anubhav.models.Prop;
-import com.twitter.anubhav.parsers.GroupParser;
-import com.twitter.anubhav.parsers.PropertyParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -34,7 +34,7 @@ class ConfigLoaderTest {
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
     void shouldParseAndReturnAllGroupNames() throws URISyntaxException {
-        URI configFile = getFileURI("config.conf");
+        URI configFile = getFileURI();
 
         Group group1 = new Group("group1");
         group1.addProperty(new Prop("p", 1));
@@ -56,7 +56,7 @@ class ConfigLoaderTest {
         assertThat(config.get("group2")).isEqualTo(new HashMap<>());
     }
 
-    private URI getFileURI(String fileName) throws URISyntaxException {
-        return Objects.requireNonNull(this.getClass().getClassLoader().getResource(fileName)).toURI();
+    private URI getFileURI() throws URISyntaxException {
+        return Objects.requireNonNull(this.getClass().getClassLoader().getResource("config.conf")).toURI();
     }
 }
