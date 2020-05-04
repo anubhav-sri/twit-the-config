@@ -1,7 +1,7 @@
 package com.twitter.anubhav;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
-import com.twitter.anubhav.models.Block;
+import com.twitter.anubhav.models.Group;
 import com.twitter.anubhav.models.Prop;
 import com.twitter.anubhav.parsers.GroupParser;
 import com.twitter.anubhav.parsers.PropertyParser;
@@ -41,47 +41,47 @@ class GroupParserTest {
 
     @Test
     void shouldReturnBlockWithEmptyProps() {
-        List<Block> blocks = groupParser.parseBlocks(Stream.of("[block]"));
-        assertThat(blocks).hasSize(1);
-        assertThat(blocks.get(0)).isEqualTo(new Block("block"));
+        List<Group> groups = groupParser.parseBlocks(Stream.of("[block]"));
+        assertThat(groups).hasSize(1);
+        assertThat(groups.get(0)).isEqualTo(new Group("block"));
 
     }
 
     @Test
     void shouldReturnBlockWithProps() {
-        Block expectedBlock = new Block("block");
+        Group expectedGroup = new Group("block");
         Prop expectedProp = new Prop("p", 1);
-        expectedBlock.addProperty(expectedProp);
+        expectedGroup.addProperty(expectedProp);
 
         when(propertyParser.parseProp("p=1")).thenReturn(expectedProp);
 
-        List<Block> blocks = groupParser.parseBlocks(Stream.of("[block]", "p=1"));
+        List<Group> groups = groupParser.parseBlocks(Stream.of("[block]", "p=1"));
 
-        assertThat(blocks).hasSize(1);
-        assertThat(blocks.get(0)).isEqualTo(expectedBlock);
+        assertThat(groups).hasSize(1);
+        assertThat(groups.get(0)).isEqualTo(expectedGroup);
 
     }
 
     @Test
     @MockitoSettings(strictness = Strictness.LENIENT)
     void shouldReturnMultipleBlocksWithMultipleProps() {
-        Block expectedBlock1 = new Block("block");
+        Group expectedGroup1 = new Group("block");
         Prop expectedProp1 = new Prop("p", 1);
         Prop expectedProp2 = new Prop("p", 1);
-        expectedBlock1.addProperty(expectedProp1);
-        expectedBlock1.addProperty(expectedProp2);
+        expectedGroup1.addProperty(expectedProp1);
+        expectedGroup1.addProperty(expectedProp2);
 
-        Block expectedBlock2 = new Block("block1");
+        Group expectedGroup2 = new Group("block1");
         Prop expectedProp3 = new Prop("p", 2);
-        expectedBlock2.addProperty(expectedProp3);
+        expectedGroup2.addProperty(expectedProp3);
 
         when(propertyParser.parseProp("p=1")).thenReturn(expectedProp1);
         when(propertyParser.parseProp("p=2")).thenReturn(expectedProp3);
         when(propertyParser.parseProp("p=4")).thenReturn(expectedProp2);
 
-        List<Block> blocks = groupParser.parseBlocks(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
+        List<Group> groups = groupParser.parseBlocks(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
 
-        assertThat(blocks).containsAll(List.of(expectedBlock1, expectedBlock2));
+        assertThat(groups).containsAll(List.of(expectedGroup1, expectedGroup2));
 
     }
 

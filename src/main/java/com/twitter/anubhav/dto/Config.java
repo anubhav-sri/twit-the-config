@@ -1,6 +1,6 @@
 package com.twitter.anubhav.dto;
 
-import com.twitter.anubhav.models.Block;
+import com.twitter.anubhav.models.Group;
 import com.twitter.anubhav.models.Prop;
 
 import java.util.HashMap;
@@ -16,10 +16,10 @@ public class Config {
         return blocks.getOrDefault(key, new HashMap<>());
     }
 
-    public void addBlock(Block block) {
-        Map<String, Object> propMap = block.getPropList()
+    public void addBlock(Group group) {
+        Map<String, Object> propMap = group.getPropList()
                 .stream()
                 .collect(toMap(Prop::getKey, Prop::getValue));
-        blocks.put(block.getName(), propMap);
+        blocks.put(group.getName(), propMap);
     }
 }

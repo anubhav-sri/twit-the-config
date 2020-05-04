@@ -1,8 +1,7 @@
 package com.twitter.anubhav.parsers;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
-import com.twitter.anubhav.models.Block;
-import com.twitter.anubhav.parsers.PropertyParser;
+import com.twitter.anubhav.models.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,24 +26,24 @@ public class GroupParser {
         return "";
     }
 
-    public List<Block> parseBlocks(Stream<String> filteredLines) {
-        List<Block> blocks = new ArrayList<>();
+    public List<Group> parseBlocks(Stream<String> filteredLines) {
+        List<Group> groups = new ArrayList<>();
         List<String> stringList = filteredLines.collect(Collectors.toList());
 
         String firstBlock = verifyIfItStartsWithBlock(stringList);
 
-        Block currentBlock = new Block(firstBlock);
+        Group currentGroup = new Group(firstBlock);
         for (String line : stringList.subList(1, stringList.size())) {
             Matcher matcherForBlock = patternForBlocks.matcher(line);
             if (matcherForBlock.find()) {
-                blocks.add(currentBlock);
-                currentBlock = new Block(matcherForBlock.group(1));
+                groups.add(currentGroup);
+                currentGroup = new Group(matcherForBlock.group(1));
             } else {
-                currentBlock.addProperty(propertyParser.parseProp(line));
+                currentGroup.addProperty(propertyParser.parseProp(line));
             }
         }
-        if (!blocks.contains(currentBlock)) blocks.add(currentBlock);
-        return blocks;
+        if (!groups.contains(currentGroup)) groups.add(currentGroup);
+        return groups;
     }
 
     private String verifyIfItStartsWithBlock(List<String> stringList) {

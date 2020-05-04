@@ -8,11 +8,11 @@ import java.util.List;
 
 @EqualsAndHashCode
 @Getter
-public class Block {
+public class Group {
     private List<Prop> propList = new ArrayList<>();
     private String name;
 
-    public Block(String name) {
+    public Group(String name) {
         this.name = name;
     }
 

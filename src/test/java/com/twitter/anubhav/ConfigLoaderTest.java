@@ -1,7 +1,7 @@
 package com.twitter.anubhav;
 
 import com.twitter.anubhav.dto.Config;
-import com.twitter.anubhav.models.Block;
+import com.twitter.anubhav.models.Group;
 import com.twitter.anubhav.models.Prop;
 import com.twitter.anubhav.parsers.GroupParser;
 import com.twitter.anubhav.readers.ConfigFileReader;
@@ -36,18 +36,18 @@ class ConfigLoaderTest {
     void shouldParseAndReturnAllGroupNames() throws URISyntaxException {
         URI configFile = getFileURI("config.conf");
 
-        Block block1 = new Block("group1");
-        block1.addProperty(new Prop("p", 1));
+        Group group1 = new Group("group1");
+        group1.addProperty(new Prop("p", 1));
 
-        Block block2 = new Block("group2");
+        Group group2 = new Group("group2");
 
         Config expectedConfig = new Config();
-        expectedConfig.addBlock(block1);
-        expectedConfig.addBlock(block2);
+        expectedConfig.addBlock(group1);
+        expectedConfig.addBlock(group2);
 
         Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "[group2]");
         when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
-        when(groupParser.parseBlocks(streamOfLines)).thenReturn(List.of(block1, block2));
+        when(groupParser.parseBlocks(streamOfLines)).thenReturn(List.of(group1, group2));
 
         Config config = new ConfigLoader(groupParser, configFileReader)
                 .loadConfig(configFile.getPath());
