@@ -23,13 +23,22 @@ public class ConfigLoader {
     public Config loadConfig(String configFile, List<String> overrides) {
         Config config = new Config();
 
-        Stream<String> nonEmptyLinesInFile = configFileReader
+        Stream<String> nonEmptyLinesInFile = readNonEmptyLinesFromFile(configFile);
+
+        parseAndEnrichTheConfig(overrides, config, nonEmptyLinesInFile);
+        return config;
+    }
+
+    private void parseAndEnrichTheConfig(List<String> overrides, Config config, Stream<String> nonEmptyLinesInFile) {
+        groupParser
+                .parse(nonEmptyLinesInFile)
+                .forEach(group -> config.addBlock(group, overrides));
+    }
+
+    private Stream<String> readNonEmptyLinesFromFile(String configFile) {
+        return configFileReader
                 .readLinesToStream(new File(configFile))
                 .filter(NON_EMPTY_FILTER);
-
-        groupParser.parse(nonEmptyLinesInFile)
-                .forEach(group -> config.addBlock(group, overrides));
-        return config;
     }
 
 }
