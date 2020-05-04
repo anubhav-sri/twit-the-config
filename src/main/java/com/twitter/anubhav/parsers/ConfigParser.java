@@ -1,4 +1,4 @@
-package com.twitter.anubhav;
+package com.twitter.anubhav.parsers;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
 import com.twitter.anubhav.models.Block;

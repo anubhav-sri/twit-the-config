@@ -1,4 +1,4 @@
-package com.twitter.anubhav;
+package com.twitter.anubhav.dto;
 
 import com.twitter.anubhav.models.Block;
 import com.twitter.anubhav.models.Prop;

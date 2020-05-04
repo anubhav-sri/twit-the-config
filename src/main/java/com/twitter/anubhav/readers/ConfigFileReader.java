@@ -1,4 +1,4 @@
-package com.twitter.anubhav;
+package com.twitter.anubhav.readers;
 
 import com.twitter.anubhav.exceptions.FileReadException;
 import com.twitter.anubhav.exceptions.InvalidFileExtensionException;

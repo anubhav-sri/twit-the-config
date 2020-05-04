@@ -3,6 +3,7 @@ package com.twitter.anubhav;
 import com.twitter.anubhav.exceptions.ConfigFormatException;
 import com.twitter.anubhav.models.Block;
 import com.twitter.anubhav.models.Prop;
+import com.twitter.anubhav.parsers.ConfigParser;
 import com.twitter.anubhav.parsers.PropertyParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

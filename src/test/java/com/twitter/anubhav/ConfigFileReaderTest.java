@@ -1,6 +1,7 @@
 package com.twitter.anubhav;
 
 import com.twitter.anubhav.exceptions.InvalidFileExtensionException;
+import com.twitter.anubhav.readers.ConfigFileReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
