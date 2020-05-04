@@ -1,5 +1,6 @@
 package com.twitter.anubhav.readers;
 
+import com.twitter.anubhav.exceptions.FileReadException;
 import com.twitter.anubhav.exceptions.InvalidFileExtensionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,13 @@ class ConfigFileReaderTest {
         File invalidInputFile = getFileURI("config.invalid");
 
         Assertions.assertThrows(InvalidFileExtensionException.class, () -> configFileReader.readLinesToStream(invalidInputFile));
+    }
+
+    @Test
+    void shouldThrowFileReadExceptionIfFileWithInValidPath() {
+        File invalidInputFile = new File("/invalid/conf.conf");
+
+        Assertions.assertThrows(FileReadException.class, () -> configFileReader.readLinesToStream(invalidInputFile));
     }
 
     private File getFileURI(String fileName) throws URISyntaxException {
