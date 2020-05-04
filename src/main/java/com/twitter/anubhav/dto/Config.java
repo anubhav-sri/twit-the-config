@@ -4,6 +4,7 @@ import com.twitter.anubhav.models.Group;
 import com.twitter.anubhav.models.Prop;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
@@ -16,14 +17,14 @@ public class Config {
         return blocks.getOrDefault(key, new HashMap<>());
     }
 
-    public void addBlock(Group group) {
-        Map<String, Object> propMap = createMapForProps(group);
+    public void addBlock(Group group, List<String> overRides) {
+        Map<String, Object> propMap = createMapForProps(group, overRides);
         blocks.put(group.getName(), propMap);
     }
 
-    private Map<String, Object> createMapForProps(Group group) {
+    private Map<String, Object> createMapForProps(Group group, List<String> overRides) {
         return group.getPropList()
                 .stream()
-                .collect(toMap(Prop::getKey, Prop::getValue));
+                .collect(toMap(Prop::getKey, prop -> prop.getValue(overRides)));
     }
 }

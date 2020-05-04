@@ -1,7 +1,7 @@
 package com.twitter.anubhav.parsers;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
-import com.twitter.anubhav.models.OverRidenProp;
+import com.twitter.anubhav.models.OverRiddenProp;
 import com.twitter.anubhav.models.Prop;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +35,7 @@ class PropertyParserTest {
     void shouldReturnOverRidenPropsWithOverRidesAndKeyAndValue() {
         Prop actualProp = propertyParser.parseProp("p<ubuntu>=valid");
 
-        assertThat(actualProp).isEqualTo(new OverRidenProp("p", "valid", "ubuntu"));
+        assertThat(actualProp).isEqualTo(new OverRiddenProp("p", "valid", "ubuntu"));
     }
 
 }

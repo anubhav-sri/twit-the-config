@@ -17,6 +17,14 @@ public class Group {
     }
 
     public void addProperty(Prop prop) {
-        propList.add(prop);
+        if (prop instanceof OverRiddenProp) {
+            propList.stream().filter(p -> p.getKey().equals(prop.getKey())).findFirst().ifPresent(
+                    pr -> {
+                        OverRiddenProp overriddenProp = (OverRiddenProp) prop;
+                        pr.addOverRides(overriddenProp.getOverRide(), overriddenProp.getValue());
+                    }
+            );
+        } else
+            propList.add(prop);
     }
 }

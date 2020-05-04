@@ -7,6 +7,7 @@ import com.twitter.anubhav.parsers.GroupParser;
 import com.twitter.anubhav.readers.ConfigFileReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -15,12 +16,15 @@ import org.mockito.quality.Strictness;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,18 +46,38 @@ class ConfigLoaderTest {
         Group group2 = new Group("group2");
 
         Config expectedConfig = new Config();
-        expectedConfig.addBlock(group1);
-        expectedConfig.addBlock(group2);
+        expectedConfig.addBlock(group1, new ArrayList<>());
+        expectedConfig.addBlock(group2, new ArrayList<>());
 
         Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "[group2]");
         when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
-        when(groupParser.parseGroups(streamOfLines)).thenReturn(List.of(group1, group2));
+        when(groupParser.parseGroups(any())).thenReturn(List.of(group1, group2));
 
         Config config = new ConfigLoader(groupParser, configFileReader)
-                .loadConfig(configFile.getPath());
+                .loadConfig(configFile.getPath(), new ArrayList<>());
 
         assertThat(config.get("group1").get("p")).isEqualTo(1);
         assertThat(config.get("group2")).isEqualTo(new HashMap<>());
+    }
+
+    @Test
+    void shouldRemoveAllEmptyLines() throws URISyntaxException {
+        URI configFile = getFileURI();
+
+        Group group1 = new Group("group1");
+        group1.addProperty(new Prop("p", 1));
+
+        Config expectedConfig = new Config();
+        expectedConfig.addBlock(group1, new ArrayList<>());
+
+        Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "", "");
+        when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
+        when(groupParser.parseGroups(any())).thenReturn(List.of(group1));
+
+        Config config = new ConfigLoader(groupParser, configFileReader)
+                .loadConfig(configFile.getPath(), new ArrayList<>());
+
+        assertThat(config.get("group1").get("p")).isEqualTo(1);
     }
 
     private URI getFileURI() throws URISyntaxException {

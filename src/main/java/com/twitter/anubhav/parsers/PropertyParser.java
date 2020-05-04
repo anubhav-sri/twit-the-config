@@ -1,7 +1,7 @@
 package com.twitter.anubhav.parsers;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
-import com.twitter.anubhav.models.OverRidenProp;
+import com.twitter.anubhav.models.OverRiddenProp;
 import com.twitter.anubhav.models.Prop;
 
 import java.util.regex.Matcher;
@@ -28,8 +28,8 @@ public class PropertyParser {
         return new Prop(keyValueMatcher.group(1), keyValueMatcher.group(3));
     }
 
-    private OverRidenProp createOverRiddenProp(Matcher keyValueMatcher) {
-        return new OverRidenProp(keyValueMatcher.group(1),
+    private OverRiddenProp createOverRiddenProp(Matcher keyValueMatcher) {
+        return new OverRiddenProp(keyValueMatcher.group(1),
                 keyValueMatcher.group(3),
                 keyValueMatcher.group(2));
     }
