@@ -12,18 +12,11 @@ import java.util.stream.Stream;
 
 public class GroupParser {
     private PropertyParser propertyParser;
-    private static final String REGEX_FOR_BLOCK = "\\[([^]]+)\\]";
+    private static final String REGEX_FOR_BLOCK = "\\[([^]]+)]";
     private Pattern patternForBlocks = Pattern.compile(REGEX_FOR_BLOCK);
 
     public GroupParser(PropertyParser propertyParser) {
         this.propertyParser = propertyParser;
-    }
-
-    public String parseBlocks(String line) {
-        if (line.matches("\\[([^]]+)\\]")) {
-            return " Config()";
-        }
-        return "";
     }
 
     public List<Group> parseBlocks(Stream<String> filteredLines) {
