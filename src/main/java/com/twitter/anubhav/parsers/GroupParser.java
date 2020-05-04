@@ -11,12 +11,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ConfigParser {
+public class GroupParser {
     private PropertyParser propertyParser;
     private static final String REGEX_FOR_BLOCK = "\\[([^]]+)\\]";
     private Pattern patternForBlocks = Pattern.compile(REGEX_FOR_BLOCK);
 
-    public ConfigParser(PropertyParser propertyParser) {
+    public GroupParser(PropertyParser propertyParser) {
         this.propertyParser = propertyParser;
     }
 

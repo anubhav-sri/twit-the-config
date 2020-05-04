@@ -3,7 +3,7 @@ package com.twitter.anubhav;
 import com.twitter.anubhav.dto.Config;
 import com.twitter.anubhav.models.Block;
 import com.twitter.anubhav.models.Prop;
-import com.twitter.anubhav.parsers.ConfigParser;
+import com.twitter.anubhav.parsers.GroupParser;
 import com.twitter.anubhav.readers.ConfigFileReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 class ConfigLoaderTest {
 
     @Mock
-    private ConfigParser configParser;
+    private GroupParser groupParser;
     @Mock
     private ConfigFileReader configFileReader;
 
@@ -47,9 +47,9 @@ class ConfigLoaderTest {
 
         Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "[group2]");
         when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
-        when(configParser.parseBlocks(streamOfLines)).thenReturn(List.of(block1, block2));
+        when(groupParser.parseBlocks(streamOfLines)).thenReturn(List.of(block1, block2));
 
-        Config config = new ConfigLoader(configParser, configFileReader)
+        Config config = new ConfigLoader(groupParser, configFileReader)
                 .loadConfig(configFile.getPath());
 
         assertThat(config.get("group1").get("p")).isEqualTo(1);

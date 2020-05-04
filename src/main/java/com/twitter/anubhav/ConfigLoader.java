@@ -2,23 +2,23 @@ package com.twitter.anubhav;
 
 
 import com.twitter.anubhav.dto.Config;
-import com.twitter.anubhav.parsers.ConfigParser;
+import com.twitter.anubhav.parsers.GroupParser;
 import com.twitter.anubhav.readers.ConfigFileReader;
 
 import java.io.File;
 
 public class ConfigLoader {
-    private ConfigParser configParser;
+    private GroupParser groupParser;
     private ConfigFileReader configFileReader;
 
-    public ConfigLoader(ConfigParser configParser, ConfigFileReader configFileReader) {
-        this.configParser = configParser;
+    public ConfigLoader(GroupParser groupParser, ConfigFileReader configFileReader) {
+        this.groupParser = groupParser;
         this.configFileReader = configFileReader;
     }
 
     public Config loadConfig(String configFile) {
         Config config = new Config();
-        configParser.parseBlocks(configFileReader.readLinesToStream(new File(configFile)))
+        groupParser.parseBlocks(configFileReader.readLinesToStream(new File(configFile)))
                 .forEach(config::addBlock);
         return config;
     }
