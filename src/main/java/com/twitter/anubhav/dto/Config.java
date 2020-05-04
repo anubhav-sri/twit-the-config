@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toUnmodifiableMap;
 
 public class Config {
 
-    private HashMap<String, Map<String, Object>> blocks = new HashMap<>();
+    private Map<String, Map<String, Object>> blocks = new HashMap<>();
 
     public Map<String, Object> get(String key) {
         return blocks.getOrDefault(key, new HashMap<>());
@@ -25,6 +25,6 @@ public class Config {
     private Map<String, Object> createMapForProps(Group group, List<String> overRides) {
         return group.getPropList()
                 .stream()
-                .collect(toMap(Prop::getKey, prop -> prop.getValue(overRides)));
+                .collect(toUnmodifiableMap(Prop::getKey, prop -> prop.getValue(overRides)));
     }
 }
