@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @EqualsAndHashCode
 @Getter
-public class Props {
+public class Prop {
     private final String key;
     private final Object value;
 
-    public Props(String key, Object value) {
+    public Prop(String key, Object value) {
         this.key = key;
         this.value = value;
     }

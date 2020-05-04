@@ -1,7 +1,7 @@
 package com.twitter.anubhav.parsers;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
-import com.twitter.anubhav.models.Props;
+import com.twitter.anubhav.models.Prop;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,16 +25,16 @@ class PropertyParserTest {
 
     @Test
     void shouldReturnPropsWithKeyAndValue() {
-        Props actualProp = propertyParser.parseProp("p=valid");
+        Prop actualProp = propertyParser.parseProp("p=valid");
 
-        assertThat(actualProp).isEqualTo(new Props("p", "valid"));
+        assertThat(actualProp).isEqualTo(new Prop("p", "valid"));
     }
 
     @Test
     void shouldReturnPropsWithOverRidesAndKeyAndValue() {
-        Props actualProp = propertyParser.parseProp("p<ubuntu>=valid");
+        Prop actualProp = propertyParser.parseProp("p<ubuntu>=valid");
 
-        assertThat(actualProp).isEqualTo(new Props("p<ubuntu>", "valid"));
+        assertThat(actualProp).isEqualTo(new Prop("p<ubuntu>", "valid"));
     }
 
 }

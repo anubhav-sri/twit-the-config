@@ -1,7 +1,7 @@
 package com.twitter.anubhav;
 
 import com.twitter.anubhav.models.Block;
-import com.twitter.anubhav.models.Props;
+import com.twitter.anubhav.models.Prop;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -34,7 +34,7 @@ class ConfigLoaderTest {
         URI configFile = getFileURI("config.conf");
 
         Block block1 = new Block("group1");
-        block1.addProperty(new Props("p", 1));
+        block1.addProperty(new Prop("p", 1));
 
         Block block2 = new Block("group2");
 

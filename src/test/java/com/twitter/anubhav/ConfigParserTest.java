@@ -2,7 +2,7 @@ package com.twitter.anubhav;
 
 import com.twitter.anubhav.exceptions.ConfigFormatException;
 import com.twitter.anubhav.models.Block;
-import com.twitter.anubhav.models.Props;
+import com.twitter.anubhav.models.Prop;
 import com.twitter.anubhav.parsers.PropertyParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,10 +49,10 @@ class ConfigParserTest {
     @Test
     void shouldReturnBlockWithProps() {
         Block expectedBlock = new Block("block");
-        Props expectedProps = new Props("p", 1);
-        expectedBlock.addProperty(expectedProps);
+        Prop expectedProp = new Prop("p", 1);
+        expectedBlock.addProperty(expectedProp);
 
-        when(propertyParser.parseProp("p=1")).thenReturn(expectedProps);
+        when(propertyParser.parseProp("p=1")).thenReturn(expectedProp);
 
         List<Block> blocks = configParser.parseBlocks(Stream.of("[block]", "p=1"));
 
@@ -65,18 +65,18 @@ class ConfigParserTest {
     @MockitoSettings(strictness = Strictness.LENIENT)
     void shouldReturnMultipleBlocksWithMultipleProps() {
         Block expectedBlock1 = new Block("block");
-        Props expectedProps1 = new Props("p", 1);
-        Props expectedProps2 = new Props("p", 1);
-        expectedBlock1.addProperty(expectedProps1);
-        expectedBlock1.addProperty(expectedProps2);
+        Prop expectedProp1 = new Prop("p", 1);
+        Prop expectedProp2 = new Prop("p", 1);
+        expectedBlock1.addProperty(expectedProp1);
+        expectedBlock1.addProperty(expectedProp2);
 
         Block expectedBlock2 = new Block("block1");
-        Props expectedProps3 = new Props("p", 2);
-        expectedBlock2.addProperty(expectedProps3);
+        Prop expectedProp3 = new Prop("p", 2);
+        expectedBlock2.addProperty(expectedProp3);
 
-        when(propertyParser.parseProp("p=1")).thenReturn(expectedProps1);
-        when(propertyParser.parseProp("p=2")).thenReturn(expectedProps3);
-        when(propertyParser.parseProp("p=4")).thenReturn(expectedProps2);
+        when(propertyParser.parseProp("p=1")).thenReturn(expectedProp1);
+        when(propertyParser.parseProp("p=2")).thenReturn(expectedProp3);
+        when(propertyParser.parseProp("p=4")).thenReturn(expectedProp2);
 
         List<Block> blocks = configParser.parseBlocks(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
 

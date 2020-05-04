@@ -9,14 +9,14 @@ import java.util.List;
 @EqualsAndHashCode
 @Getter
 public class Block {
-    private List<Props> propsList = new ArrayList<>();
+    private List<Prop> propList = new ArrayList<>();
     private String name;
 
     public Block(String name) {
         this.name = name;
     }
 
-    public void addProperty(Props prop) {
-        propsList.add(prop);
+    public void addProperty(Prop prop) {
+        propList.add(prop);
     }
 }

@@ -1,7 +1,7 @@
 package com.twitter.anubhav;
 
 import com.twitter.anubhav.models.Block;
-import com.twitter.anubhav.models.Props;
+import com.twitter.anubhav.models.Prop;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +17,9 @@ public class Config {
     }
 
     public void addBlock(Block block) {
-        Map<String, Object> propMap = block.getPropsList()
+        Map<String, Object> propMap = block.getPropList()
                 .stream()
-                .collect(toMap(Props::getKey, Props::getValue));
+                .collect(toMap(Prop::getKey, Prop::getValue));
         blocks.put(block.getName(), propMap);
     }
 }
