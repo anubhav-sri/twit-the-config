@@ -11,7 +11,7 @@
 * ABility to handle overrides.
 
 # Running the project
-./gradlew build
+`./gradlew build`
 You will see the jar in the target folder. You need imoport this jar into your project in order to start working.
 
 # Approach
@@ -30,11 +30,15 @@ All the scenarios are well tested using junit jupiter unit tests and 1 integrati
 
 # Areas of Improvement
 The design implemented was one of the options came to mind. However there can be alternatves as well. In this implementation, the configLoader calls GroupParser and the GroupParser calls the PropertyParser. We can also do in other way where groupParser maps to the raw Groups which are group name and list of lines which is again mapped to propertyParser  by outside class.
-Like: Stream<Lines> readLines = fileReader.read()
-groupParser.parse(readLines).map(PropsParser.parse).map(PropertyParser.parse).forEach(addBlock)
+Like: `Stream<Lines> readLines = fileReader.read()
+groupParser.parse(readLines).map(PropsParser.parse).map(PropertyParser.parse).forEach(addBlock)`
 
 Comments are not handled yet. The filter for empty line is on ConfigLoader. May be on the similar approach of parsers we can also have different filters which would be applied before calling the parser.
 
 The Config class has a map. I could have introduced another concrete class in order to control it better.
+
+Another set of improvement is the contract for the Parser. The parser exposes an interface which has 1 method as contract.
+* Parse() - responsible to parse.
+Currently the classes extending from PatternMatchingParse, uses the matches method internally while parsing. May be we can expose matches as a contract with the Parser interface and then let the caller first call the macthes before calling parse. That will make the GroupParser and Property parser more cleaner. Also this goes well with our very first suggestion for improvement.
 
 
