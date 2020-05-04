@@ -17,9 +17,13 @@ public class Config {
     }
 
     public void addBlock(Group group) {
-        Map<String, Object> propMap = group.getPropList()
+        Map<String, Object> propMap = createMapForProps(group);
+        blocks.put(group.getName(), propMap);
+    }
+
+    private Map<String, Object> createMapForProps(Group group) {
+        return group.getPropList()
                 .stream()
                 .collect(toMap(Prop::getKey, Prop::getValue));
-        blocks.put(group.getName(), propMap);
     }
 }

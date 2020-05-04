@@ -12,35 +12,44 @@ import java.util.stream.Stream;
 
 public class GroupParser {
     private PropertyParser propertyParser;
-    private static final String REGEX_FOR_BLOCK = "\\[([^]]+)]";
-    private Pattern patternForBlocks = Pattern.compile(REGEX_FOR_BLOCK);
+    private static final String REGEX_FOR_GROUP = "\\[([^]]+)]";
+    private Pattern patternForGroup = Pattern.compile(REGEX_FOR_GROUP);
 
     public GroupParser(PropertyParser propertyParser) {
         this.propertyParser = propertyParser;
     }
 
-    public List<Group> parseBlocks(Stream<String> filteredLines) {
-        List<Group> groups = new ArrayList<>();
+    public List<Group> parseGroups(Stream<String> filteredLines) {
+        List<Group> groupsInFile = new ArrayList<>();
         List<String> stringList = filteredLines.collect(Collectors.toList());
 
         String firstBlock = verifyIfItStartsWithBlock(stringList);
-
         Group currentGroup = new Group(firstBlock);
+
         for (String line : stringList.subList(1, stringList.size())) {
-            Matcher matcherForBlock = patternForBlocks.matcher(line);
-            if (matcherForBlock.find()) {
-                groups.add(currentGroup);
-                currentGroup = new Group(matcherForBlock.group(1));
+            Matcher matcherForGroup = patternForGroup.matcher(line);
+            if (matcherForGroup.matches()) {
+                currentGroup = addTheExistingGroupAndStartNewGroup(groupsInFile, currentGroup, matcherForGroup);
             } else {
                 currentGroup.addProperty(propertyParser.parseProp(line));
             }
         }
-        if (!groups.contains(currentGroup)) groups.add(currentGroup);
-        return groups;
+        addTheLastGroupFound(groupsInFile, currentGroup);
+        return groupsInFile;
+    }
+
+    private Group addTheExistingGroupAndStartNewGroup(List<Group> groupsInFile, Group currentGroup, Matcher matcherForGroup) {
+        groupsInFile.add(currentGroup);
+        currentGroup = new Group(matcherForGroup.group(1));
+        return currentGroup;
+    }
+
+    private void addTheLastGroupFound(List<Group> groupsInFile, Group currentGroup) {
+        if (!groupsInFile.contains(currentGroup)) groupsInFile.add(currentGroup);
     }
 
     private String verifyIfItStartsWithBlock(List<String> stringList) {
-        Matcher compiledPattern = patternForBlocks.matcher(stringList.get(0));
+        Matcher compiledPattern = patternForGroup.matcher(stringList.get(0));
         if (compiledPattern.find()) {
             return compiledPattern.group(1);
         }

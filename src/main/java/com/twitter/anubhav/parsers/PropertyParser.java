@@ -13,15 +13,28 @@ public class PropertyParser {
 
     public Prop parseProp(String line) {
         Matcher keyValueMatcher = patternForKeyValuePairs.matcher(line);
-        if (keyValueMatcher.find()) {
-            if (!keyValueMatcher.group(2).isEmpty()) {
-                return new OverRidenProp(keyValueMatcher.group(1),
-                        keyValueMatcher.group(3),
-                        keyValueMatcher.group(2));
+
+        if (keyValueMatcher.matches()) {
+            if (isAnOverRiddenProperty(keyValueMatcher)) {
+                return createOverRiddenProp(keyValueMatcher);
             }
-            return new Prop(keyValueMatcher.group(1), keyValueMatcher.group(3));
+            return createDefaultProp(keyValueMatcher);
         }
         throw new ConfigFormatException("Not a correct format for key-value pair");
 
+    }
+
+    private Prop createDefaultProp(Matcher keyValueMatcher) {
+        return new Prop(keyValueMatcher.group(1), keyValueMatcher.group(3));
+    }
+
+    private OverRidenProp createOverRiddenProp(Matcher keyValueMatcher) {
+        return new OverRidenProp(keyValueMatcher.group(1),
+                keyValueMatcher.group(3),
+                keyValueMatcher.group(2));
+    }
+
+    private boolean isAnOverRiddenProperty(Matcher keyValueMatcher) {
+        return !keyValueMatcher.group(2).isEmpty();
     }
 }

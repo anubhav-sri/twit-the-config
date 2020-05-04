@@ -47,7 +47,7 @@ class ConfigLoaderTest {
 
         Stream<String> streamOfLines = Stream.of("[group1]", "p=1", "[group2]");
         when(configFileReader.readLinesToStream(new File(configFile))).thenReturn(streamOfLines);
-        when(groupParser.parseBlocks(streamOfLines)).thenReturn(List.of(group1, group2));
+        when(groupParser.parseGroups(streamOfLines)).thenReturn(List.of(group1, group2));
 
         Config config = new ConfigLoader(groupParser, configFileReader)
                 .loadConfig(configFile.getPath());

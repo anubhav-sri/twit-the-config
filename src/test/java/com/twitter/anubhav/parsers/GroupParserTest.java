@@ -33,13 +33,13 @@ class GroupParserTest {
     @Test
     void shouldThrowConfigFormatExceptionWhenFileDoesNotStartsWithBlock() {
         Assertions.assertThrows(ConfigFormatException.class,
-                () -> groupParser.parseBlocks(Stream.of("p=1", "[block]")));
+                () -> groupParser.parseGroups(Stream.of("p=1", "[block]")));
 
     }
 
     @Test
     void shouldReturnBlockWithEmptyProps() {
-        List<Group> groups = groupParser.parseBlocks(Stream.of("[block]"));
+        List<Group> groups = groupParser.parseGroups(Stream.of("[block]"));
         assertThat(groups).hasSize(1);
         assertThat(groups.get(0)).isEqualTo(new Group("block"));
 
@@ -53,7 +53,7 @@ class GroupParserTest {
 
         when(propertyParser.parseProp("p=1")).thenReturn(expectedProp);
 
-        List<Group> groups = groupParser.parseBlocks(Stream.of("[block]", "p=1"));
+        List<Group> groups = groupParser.parseGroups(Stream.of("[block]", "p=1"));
 
         assertThat(groups).hasSize(1);
         assertThat(groups.get(0)).isEqualTo(expectedGroup);
@@ -77,7 +77,7 @@ class GroupParserTest {
         when(propertyParser.parseProp("p=2")).thenReturn(expectedProp3);
         when(propertyParser.parseProp("p=4")).thenReturn(expectedProp2);
 
-        List<Group> groups = groupParser.parseBlocks(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
+        List<Group> groups = groupParser.parseGroups(Stream.of("[block]", "p=1", "p=4", "[block1]", "p=2"));
 
         assertThat(groups).containsAll(List.of(expectedGroup1, expectedGroup2));
 
