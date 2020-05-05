@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class ConfigFileReader {
 
     public Stream<String> readLinesToStream(File file) {
-        if (!file.getName().endsWith(".conf")) throw new InvalidFileExtensionException();
+        if (!file.getName().endsWith(".conf")) throw new InvalidFileExtensionException("File extension should always be .conf");
         try {
             return Files.lines(file.toPath());
         } catch (IOException e) {
