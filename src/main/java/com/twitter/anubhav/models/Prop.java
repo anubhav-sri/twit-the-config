@@ -15,7 +15,7 @@ public class Prop {
     private Map<String, Object> overRides = new LinkedHashMap<>();
 
     public Prop(String key, Object value) {
-        this.key = key;
+        this.key = key.trim();
         this.value = value;
     }
 
